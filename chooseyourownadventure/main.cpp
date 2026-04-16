@@ -51,6 +51,7 @@ int main() {
     introduction();
 
     int enemyIndex = 0;
+    int currentLine = 0;
 
     // Interaction with rooms
     auto current = castleRooms.getHead();
@@ -79,10 +80,8 @@ int main() {
             if (choice == 3) {
 
                 ifstream enemyFile("enemies.csv");
-                
                 if (enemyFile.is_open()) {
                     string line;
-                    int currentLine = 0;
                     bool found = false;
                     while (getline(enemyFile, line)) {
                         if (currentLine == enemyIndex) {
@@ -108,7 +107,7 @@ int main() {
                         currentLine++;
                     }
                     enemyFile.close();
-                    enemyIndex = (enemyIndex + 1) % 4; // Cycle through 4 enemies; adjust as needed based on actual number of enemies
+                    enemyIndex++; // changes enemy. No loop
                 } else {
                     cout << "Unable to open enemies.csv" << endl;
                 }
@@ -121,6 +120,8 @@ int main() {
 
             // OPTION 4: Assumes 'Leave the room' is the last action
             if (choice == current->room.getActions().size()) {  
+                enemyIndex++;
+                currentLine++;
                 current = current->next;  // Move to next room
             }
             
