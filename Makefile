@@ -1,7 +1,8 @@
 CXX = g++
 CXXFLAGS = -std=c++11
-TARGET = adventure
-SOURCES = main.cpp LinkedList.cpp Room.cpp Enemy.cpp
+TARGET = finalproject
+SRC_DIR = chooseyourownadventure
+SOURCES = $(addprefix $(SRC_DIR)/, main.cpp LinkedList.cpp Room.cpp Enemy.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 
 all: $(TARGET)
@@ -9,11 +10,11 @@ all: $(TARGET)
 $(TARGET): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(OBJECTS)
 
-%.o: %.cpp
+$(SRC_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 run: $(TARGET)
-	./$(TARGET)
+	cd $(SRC_DIR) && ../$(TARGET)
 
 clean:
 	rm -f $(OBJECTS) $(TARGET)
