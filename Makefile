@@ -2,7 +2,7 @@ CXX = g++
 CXXFLAGS = -std=c++11
 TARGET = finalproject
 SRC_DIR = chooseyourownadventure
-SOURCES = $(addprefix $(SRC_DIR)/, main.cpp LinkedList.cpp Room.cpp Enemy.cpp)
+SOURCES = $(addprefix $(SRC_DIR)/, main.cpp LinkedList.cpp Room.cpp Enemy.cpp Ally.cpp)
 OBJECTS = $(SOURCES:.cpp=.o)
 
 all: $(TARGET)

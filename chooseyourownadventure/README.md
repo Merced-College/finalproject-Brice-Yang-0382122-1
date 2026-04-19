@@ -9,4 +9,4 @@ TO DO
 'main' Add combat dialogue, combat mechanics, and consequences of combat
 'main' integrate 'player' into
 'main' add 'void' logic for 'player_health' and 'enemy'
-
+'ally' create csv. and class

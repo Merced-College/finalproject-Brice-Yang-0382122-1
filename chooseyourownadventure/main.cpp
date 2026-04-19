@@ -7,6 +7,7 @@
 #include <sstream>
 #include "LinkedList.h"
 #include "Enemy.h"
+#include "Ally.h"
 
 void introduction() { 
     cout << "Welcome to the Castle Adventure!\n";
@@ -51,7 +52,10 @@ int main() {
     introduction();
 
     int enemyIndex = 0;
+    int allyIndex = 0;
     int currentLine = 0;
+    
+
 
     // Interaction with rooms
     auto current = castleRooms.getHead();
@@ -76,15 +80,57 @@ int main() {
         else {
             cout << "You chose: " << current->room.getActions()[choice - 1] << endl;
 
+            // OPTION 2: Player chooses to interact with Ally  
+            if (choice == current->room.getActions().size() - 2) {
+
+                ifstream allyFile("allies.csv");
+                
+                if (allyFile.is_open()) {
+                    string line;
+
+                    currentLine = 0;
+                    while (getline(allyFile, line)) { // Reads through enemies.csv
+                        cout << allyIndex << endl;
+                        cout << currentLine << endl;
+                        if (currentLine == allyIndex) { // Every unsucessful if statement increments currentLine, determining the Ally read.
+                            stringstream ss(line);
+                            string name, description, actionsStr;
+                            vector<string> actions;
+
+                            getline(ss, name, ',');
+                            getline(ss, description, ',');
+                            getline(ss, actionsStr);
+
+                            stringstream actionStream(actionsStr);
+                            string action;
+                            while (getline(actionStream, action, ';')) {
+                                actions.push_back(action);
+                            }
+
+                            Ally ally(name, description, actions);
+                            cout << ally.toString() << endl;
+                            break;
+                        }
+                        currentLine++;
+                    } 
+                    allyFile.close();
+                    allyIndex++; // Used to determine which Ally is encountered.
+                }
+            }
+
             // OPTION 3: Player chooses to fight Enemy
-            if (choice == 3) {
+            if (choice == current->room.getActions().size() - 1) {
 
                 ifstream enemyFile("enemies.csv");
+                
                 if (enemyFile.is_open()) {
                     string line;
-                    bool found = false;
-                    while (getline(enemyFile, line)) {
-                        if (currentLine == enemyIndex) {
+
+                    currentLine = 0;
+                    while (getline(enemyFile, line)) { // Reads through enemies.csv
+                        cout << enemyIndex << endl;
+                        cout << currentLine << endl;
+                        if (currentLine == enemyIndex) { // Every unsucessful if statement increments currentLine, determining the Enemy read.
                             stringstream ss(line);
                             string name, description, actionsStr;
                             vector<string> actions;
@@ -101,27 +147,26 @@ int main() {
 
                             Enemy enemy(name, description, actions);
                             cout << enemy.toString() << endl;
-                            found = true;
                             break;
                         }
                         currentLine++;
-                    }
+                    } 
                     enemyFile.close();
-                    enemyIndex++; // changes enemy. No loop
-                } else {
-                    cout << "Unable to open enemies.csv" << endl;
+                    enemyIndex++; // Used to determine which Enemy is encountered.
                 }
                 
-                //Add combat dialogue, combat mechanics, and consequences of combat here.
+                // Add combat dialogue, combat mechanics, and consequences of combat here.
 
-                // pushes into next room, may remove
+                // Pushes into next room, may remove
                 current = current->next;
             }
 
             // OPTION 4: Assumes 'Leave the room' is the last action
             if (choice == current->room.getActions().size()) {  
                 enemyIndex++;
-                currentLine++;
+                cout << enemyIndex << endl;
+                cout << currentLine << endl;
+
                 current = current->next;  // Move to next room
             }
             
